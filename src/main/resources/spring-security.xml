@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:security="http://www.springframework.org/schema/security"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+            http://www.springframework.org/schema/beans/spring-beans.xsd
+            http://www.springframework.org/schema/context
+            http://www.springframework.org/schema/context/spring-context.xsd
+            http://www.springframework.org/schema/aop
+            http://www.springframework.org/schema/aop/spring-aop.xsd
+            http://www.springframework.org/schema/tx
+            http://www.springframework.org/schema/tx/spring-tx.xsd
+            http://www.springframework.org/schema/security
+            http://www.springframework.org/schema/security/spring-security.xsd">
+
+    <!--静态资源无需经过security安全控制-->
+    <security:http pattern="/css/**" security="none"/>
+    <security:http pattern="/img/**" security="none"/>
+    <security:http pattern="/plugins/**" security="none"/>
+    <security:http pattern="/failer.jsp" security="none"/>
+
+    <!--
+    auto-config="true"  使用security的默认配置
+    use-expressions="true"  使用jsp页面security的el表达式
+    -->
+    <security:http auto-config="true" use-expressions="true">
+        <!--login.jsp允许匿名访问-->
+        <security:intercept-url pattern="/login.jsp" access="permitAll()"/>
+        <!--使用spring的el表达式来指定项目所有资源访问都必须有ROLE_USER或ROLE_ADMIN角色-->
+        <security:intercept-url pattern="/**" access="hasAnyRole('ROLE_USER','ROLE_ADMIN')"/>
+
+        <!--
+        login-page="/login.jsp" 指定自定义的登录页面
+        login-processing-url="/login"
+        default-target-url="/index.jsp" 指定登录成功后的默认页面
+        authentication-failure-url="/failer.jsp" 指定未登录访问资源跳转的页面
+        -->
+        <security:form-login login-page="/login.jsp"
+                             login-processing-url="/login"
+                             default-target-url="/index.jsp"
+                             authentication-failure-url="/failer.jsp" />
+
+        <!--
+        logout-url="/logout" 指定处理登出的controller路径
+        logout-success-url="/login.jsp" 指定登出成功后跳转的路径
+        -->
+        <security:logout logout-url="/logout" logout-success-url="/login.jsp"/>
+
+        <!--禁止开启跨站请求伪造，如果不开启此功能，登录后访问首页仍然会报403错误-->
+        <security:csrf disabled="true"/>
+    </security:http>
+
+    <!--配置一个用户-->
+    <security:authentication-manager>
+        <security:authentication-provider>
+            <security:user-service>
+                <!--
+					password="{noop}1234"	{noop}表示不使用密码加密功能
+				 -->
+                <security:user name="lx" authorities="ROLE_USER" password="{noop}1234"></security:user>
+            </security:user-service>
+        </security:authentication-provider>
+    </security:authentication-manager>
+</beans>

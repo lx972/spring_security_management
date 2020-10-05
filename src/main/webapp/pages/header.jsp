@@ -37,8 +37,12 @@
 								<a href="#" class="btn btn-default btn-flat">修改密码</a>
 							</div>
 							<div class="pull-right">
-								<a href="${pageContext.request.contextPath}/login.jsp"
-									class="btn btn-default btn-flat">注销</a>
+								<%--<a href="${pageContext.request.contextPath}/login.jsp"
+									class="btn btn-default btn-flat">注销</a>--%>
+								<%--security规定注销必须使用post请求--%>
+								<form action="${pageContext.request.contextPath}/logout" method="post">
+									<button type="submit" class="btn btn-default btn-flat">注销</button>
+								</form>
 							</div>
 						</li>
 					</ul></li>
