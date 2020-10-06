@@ -1,11 +1,12 @@
 package com.itheima.service;
 
 import com.itheima.domain.SysUser;
+import org.springframework.security.core.userdetails.UserDetailsService;
 
 import java.util.List;
 import java.util.Map;
 
-public interface UserService {
+public interface UserService extends UserDetailsService {
 
     public void save(SysUser user);
 

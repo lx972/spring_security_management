@@ -51,15 +51,17 @@
         <security:csrf disabled="true"/>
     </security:http>
 
-    <!--配置一个用户-->
+    <!--加密对象-->
+    <bean id="bCryptPasswordEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"/>
+
+    <!--设置Spring Security认证用户信息的来源-->
     <security:authentication-manager>
-        <security:authentication-provider>
-            <security:user-service>
-                <!--
-					password="{noop}1234"	{noop}表示不使用密码加密功能
-				 -->
-                <security:user name="lx" authorities="ROLE_USER" password="{noop}1234"></security:user>
-            </security:user-service>
+        <!--
+        user-service-ref="userServiceImpl" 指定使用这个对象去数据库加载用户信息
+        对象名字就是类名首字母小写
+        -->
+        <security:authentication-provider user-service-ref="userServiceImpl">
+            <security:password-encoder ref="bCryptPasswordEncoder"/>
         </security:authentication-provider>
     </security:authentication-manager>
 </beans>
