@@ -90,6 +90,12 @@ public class UserServiceImpl implements UserService {
         }
         UserDetails userDetails = new User(sysUser.getUsername(),
                 sysUser.getPassword(),
+                //根据业务的需要选择使用，这里我们只使用一个
+                //status的值为1的时候，启用该账号
+                sysUser.getStatus()==1,
+                true,
+                true,
+                true,
                 authorities);
         return userDetails;
     }

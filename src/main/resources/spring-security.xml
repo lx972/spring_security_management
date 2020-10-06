@@ -19,6 +19,7 @@
     <security:http pattern="/img/**" security="none"/>
     <security:http pattern="/plugins/**" security="none"/>
     <security:http pattern="/failer.jsp" security="none"/>
+    <security:http pattern="/favicon.ico" security="none"/>
 
     <!--
     auto-config="true"  使用security的默认配置
@@ -49,6 +50,15 @@
 
         <!--禁止开启跨站请求伪造，如果不开启此功能，登录后访问首页仍然会报403错误-->
         <security:csrf disabled="true"/>
+
+        <!--
+        开启remember me过滤器
+        token-validity-seconds="60" 设置token存储时间为60秒
+        data-source-ref="dataSource"    指定数据源，因为需要将用户信息保存到数据库
+        remember-me-parameter="remember-me" 指定记住的参数名
+        -->
+        <security:remember-me token-validity-seconds="60" data-source-ref="dataSource" remember-me-parameter="remember-me" />
+
     </security:http>
 
     <!--加密对象-->
